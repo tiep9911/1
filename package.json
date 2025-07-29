@@ -1,0 +1,16 @@
+{
+  "name": "sunwin-tool",
+  "version": "1.0.0",
+  "description": "Tool theo dõi kết quả Tài Xỉu từ SunWin",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "author": "binhtool90",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.18.2",
+    "ws": "^8.15.1"
+  }
+}
