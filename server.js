@@ -35,8 +35,8 @@ const messagesToSend = [
     "subi": true
   }],
   // Thử nghiệm gửi các lệnh 310 và 317
-  [6, "SimmsPlugin", { cmd: 310 }],
-  [6, "lobbyPlugin", { cmd: 317 }]
+  [6, "SimmsPlugin", { cmd: 1005 }],
+  [6, "lobbyPlugin", { cmd: 10001 }]
 ];
 
 
