@@ -39,8 +39,8 @@ const messagesToSend = [
   }],
 
   // Thử nghiệm gửi các lệnh 310 và 317
-  [6, "SimmsLobbyPlugin", { cmd: 310 }],
-  [6, "SimmsLobbyPlugin", { cmd: 317 }]
+  [6, "SimmsPlugin", { cmd: 310 }],
+  [6, "SimmsPlugin", { cmd: 317 }]
 ];
 
 
