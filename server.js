@@ -30,8 +30,8 @@ const messagesToSend = [
     "subi": true
   }],
 
-  // Bước 2: Thêm lệnh muốn test vào đây
-  [6, "SimmsLobbyPlugin", { cmd: 310 }] 
+  // Bước 3: Thử lệnh 317
+  [6, "SimmsLobbyPlugin", { cmd: 317 }] 
 ];
 
 
@@ -39,7 +39,7 @@ const messagesToSend = [
 let ws = null;
 let pingInterval = null;
 let reconnectTimeout = null;
-let successTimeout = null; // Biến để theo dõi timeout báo thành công
+let successTimeout = null; 
 
 function duDoanTiepTheo(pattern) {
   if (pattern.length < 6) return "?";
@@ -66,13 +66,12 @@ function connectWebSocket() {
       }, i * 600);
     });
 
-    // BÁO THÀNH CÔNG NẾU GIỮ ĐƯỢC KẾT NỐI SAU 5 GIÂY
     clearTimeout(successTimeout);
     successTimeout = setTimeout(() => {
       if (ws.readyState === WebSocket.OPEN) {
         console.log('🎉🎉🎉 [THÀNH CÔNG] Lệnh đã được chấp nhận, kết nối ổn định! 🎉🎉🎉');
       }
-    }, 5000); // 5 giây
+    }, 5000); 
 
     pingInterval = setInterval(() => {
       if (ws.readyState === WebSocket.OPEN) { ws.ping(); }
@@ -83,11 +82,10 @@ function connectWebSocket() {
 
   ws.on('message', (message) => {
     console.log('Nhận được:', message.toString());
-    // ... (phần xử lý message giữ nguyên)
   });
 
   ws.on('close', () => {
-    clearTimeout(successTimeout); // Xóa bỏ thông báo thành công nếu kết nối bị ngắt sớm
+    clearTimeout(successTimeout); 
     console.log('[🔌] Mất kết nối WebSocket. Đang reconnect...');
     clearInterval(pingInterval);
     reconnectTimeout = setTimeout(connectWebSocket, 2500);
