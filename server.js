@@ -6,89 +6,124 @@ const app = express();
 app.use(cors());
 const PORT = process.env.PORT || 5000;
 
-// =================================================================
-// === Thông tin xác thực được đưa trực tiếp vào code ===
-// =================================================================
-const WEBSOCKET_URL = "wss://websocket.azhkthg1.net/wsbinary?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJnZW5kZXIiOjAsImNhblZpZXdTdGF0IjpmYWxzZSwiZGlzcGxheU5hbWUiOiJ0aWVwODBjbSIsImJvdCI6MCwiaXNNZXJjaGFudCI6ZmFsc2UsInZlcmlmaWVkQmFua0FjY291bnQiOmZhbHNlLCJwbGF5RXZlbnRMb2JieSI6ZmFsc2UsImN1c3RvbWVySWQiOjIzMTQ0NDI0NCwiYWZmSWQiOiI5YTUyZTZhMy00NmU2LTRkMWYtYTg2OC0xZWE2MDAyNTRkZWEiLCJiYW5uZWQiOmZhbHNlLCJicmFuZCI6InN1bi53aW4iLCJ0aW1lc3RhbXAiOjE3NTM3NTMzNzA0NTEsImxvY2tHYW1lcyI6W10sImFtb3VudCI6MCwibG9ja0NoYXQiOmZhbHNlLCJwaG9uZVZlcmlmaWVkIjp0cnVlLCJpcEFkZHJlc3MiOiIyNDAyOjgwMDo2MWVhOmI2NzM6NzAyZjo2YWZmOmZlYjA6ZjZhMiIsIm11dGUiOmZhbHNlLCJhdmF0YXIiOiJodHRwczovL2ltYWdlcy5zd2luc2hvcC5uZXQvaW1hZ2VzL2F2YXRhci9hdmF0YXJfMTMucG5nIiwicGxhdGZvcm1JZCI6MiwidXNlcklkIjoiOWE1MmU2YTMtNDZlNi00ZDFmLWE4NjgtMWVhNjAwMjU0ZGVhIiwicmVnVGltZSI6MTc0NDAwNDk3NTMzMCwicGhvbmUiOiI4NDMyNjA5MjExMCIsImRlcG9zaXQiOnRydWUsInVzZXJuYW1lIjoiU0NfdGllcDE0MTIwMTAifQ.cOOWtxV7i9uesoUiUNh0PTCl-yqgYNgODllfbGUUGoY";
-const AUTH_INFO = "{\"ipAddress\":\"2402:800:61ea:b673:702f:6aff:feb0:f6a2\",\"wsToken\":\"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJnZW5kZXIiOjAsImNhblZpZXdTdGF0IjpmYWxzZSwiZGlzcGxheU5hbWUiOiJ0aWVwODBjbSIsImJvdCI6MCwiaXNNZXJjaGFudCI6ZmFsc2UsInZlcmlmaWVkQmFua0FjY291bnQiOmZhbHNlLCJwbGF5RXZlbnRMb2JieSI6ZmFsc2UsImN1c3RvbWVySWQiOjIzMTQ0NDI0NCwiYWZmSWQiOiI5YTUyZTZhMy00NmU2LTRkMWYtYTg2OC0xZWE2MDAyNTRkZWEiLCJiYW5uZWQiOmZhbHNlLCJicmFuZCI6InN1bi53aW4iLCJ0aW1lc3RhbXAiOjE3NTM3NTAzODY5NzQsImxvY2tHYW1lcyI6W10sImFtb3VudCI6MCwibG9ja0NoYXQiOmZhbHNlLCJwaG9uZVZlcmlmaWVkIjp0cnVlLCJpcEFkZHJlc3MiOiIyNDAyOjgwMDo2MWVhOmI2NzM6NzAyZjo2YWZmOmZlYjA6ZjZhMiIsIm11dGUiOmZhbHNlLCJhdmF0YXIiOiJodHRwczovL2ltYWdlcy5zd2luc2hvcC5uZXQvaW1hZ2VzL2F2YXRhci9hdmF0YXJfMTMucG5nIiwicGxhdGZvcm1JZCI6MiwidXNlcklkIjoiOWE1MmU2YTMtNDZlNi00ZDFmLWE4NjgtMWVhNjAwMjU0ZGVhIiwicmVnVGltZSI6MTc0NDAwNDk3NTMzMCwicGhvbmUiOiI4NDMyNjA5MjExMCIsImRlcG9zaXQiOnRydWUsInVzZXJuYW1lIjoiU0NfdGllcDE0MTIwMTAifQ.rcaly7q7oKb5kNnpYTVvd6HaiiyYt3As10G7VewsoTM\",\"locale\":\"vi\",\"userId\":\"9a52e6a3-46e6-4d1f-a868-1ea600254dea\",\"username\":\"SC_tiep1412010\",\"timestamp\":1753750386974,\"refreshToken\":\"f526496e787f4dfaaf722c090ef7e5d5.83a72373c16b4b5f83a3dc2433b20336\"}";
-const AUTH_SIGNATURE = "129692409ECA9FBFED8C1AEFC52DF3A6645B8F8CED5F70EA9093931F8E2E13823E9052AADCACD57C576FC9765A941B4E7DCD3ED2012FE31B4D0CCDD44AE6524307F22C36704766D712859B02368DF4E6F01328FCF079319CA6EA62A27CEE6B4960FC74A4C36CB7B2E7C855370B64F3D92B9B7990FE5AECBF5D1D371E2265FB1E";
-
-
 // === Biến lưu trạng thái ===
-let currentData = { id: "binhtool90", id_phien: null, ket_qua: "", pattern: "", du_doan: "?" };
+let currentData = {
+  id: "binhtool90",
+  id_phien: null,
+  ket_qua: "",
+  pattern: "",
+  du_doan: "?"
+};
 let id_phien_chua_co_kq = null;
-let patternHistory = [];
-
+let patternHistory = []; // Lưu dãy T/X gần nhất
 
 // === Danh sách tin nhắn gửi lên server WebSocket ===
 const messagesToSend = [
-  // Tin nhắn xác thực (luôn giữ lại)
-  [1, "Simms", "SC_tiep1412010", "tiep2010", {
-    "info": AUTH_INFO,
-    "signature": AUTH_SIGNATURE,
-    "pid": 4,
-    "subi": true
+  [1, "MiniGame", "SC_anhlatrumapi1", "binhtool90", {
+    "info": "{\"ipAddress\":\"2001:ee0:5709:2720:7ba7:fb19:d038:aa91\",\"wsToken\":\"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJhbW91bnQiOjAsImdlbmRlciI6MCwiZGlzcGxheU5hbWUiOiJ0YW9sYWJpbmgxMjk5IiwicGhvbmVWZXJpZmllZCI6ZmFsc2UsImJvdCI6MCwiYXZhdGFyIjoiaHR0cHM6Ly9pbWFnZXMuc3dpbnNob3AubmV0L2ltYWdlcy9hdmF0YXIvYXZhdGFyXzAyLnBuZyIsInVzZXJJZCI6IjZhNWNmN2NmLTQ0ODYtNGJlNS1hMDIzLTUyOTkyOGUyZDg1YyIsInJlZ1RpbWUiOjE3NTI3NjcyOTk2OTgsInBob25lIjoiIiwiY3VzdG9tZXJJZCI6MjgzNTEyODQ1LCJicmFuZCI6InN1bi53aW4iLCJ1c2VybmFtZSI6IlNDX2FuaGxhdHJ1bWFwaTEiLCJ0aW1lc3RhbXAiOjE3NTI3ODczMDg2NTl9.5PQjsPsm2G7SyEnAbNqXtxkxYlMQIwcJpxjh1l_hH6c\",\"userId\":\"6a5cf7cf-4486-4be5-a023-529928e2d85c\",\"username\":\"SC_anhlatrumapi1\",\"timestamp\":1752787308659}",
+    "signature": "5537B01C383416D3BE734483E7A84B7CAFB9ADFE81CE55406B2D455D205F437E453989E499C153EEDDEB8614D2A347C6E0E1D7335C8C39E8555E23775C0C3B7727DD1C2DBEF76ED82122FD56C83F117C07FC3AD12300BE2207F5046BEFF0D80A979D8146BA495E6425874D46A81DEFCA11427494D22C12C0C90427873AD0BFB3"
   }],
-
-  // Bước 3: Thử lệnh 317
-  [6, "taixiuPlugin", { cmd: 1005 }] 
+  [6, "MiniGame", "taixiuPlugin", { cmd: 1005 }],
+  [6, "MiniGame", "SimmsLobbyPlugin", { cmd: 310 }]
 ];
-
 
 // === WebSocket ===
 let ws = null;
 let pingInterval = null;
 let reconnectTimeout = null;
-let successTimeout = null; 
+let isManuallyClosed = false;
 
 function duDoanTiepTheo(pattern) {
   if (pattern.length < 6) return "?";
+
   const last3 = pattern.slice(-3).join('');
   const last4 = pattern.slice(-4).join('');
+
   const count = pattern.join('').split(last3).length - 1;
   if (count >= 2) return last3[0];
+
   const count4 = pattern.join('').split(last4).length - 1;
   if (count4 >= 2) return last4[0];
+
   return "?";
 }
 
 function connectWebSocket() {
-  ws = new WebSocket(WEBSOCKET_URL, { headers: { "User-Agent": "Mozilla/5.0", "Origin": "https://play.sun.win" } });
+  ws = new WebSocket(
+    "wss://websocket.azhkthg1.net/websocket?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJhbW91bnQiOjAsImdlbmRlciI6MCwiZGlzcGxheU5hbWUiOiJ0YW9sYWJpbmgxMjk5IiwicGhvbmVWZXJpZmllZCI6ZmFsc2UsImJvdCI6MCwiYXZhdGFyIjoiaHR0cHM6Ly9pbWFnZXMuc3dpbnNob3AubmV0L2ltYWdlcy9hdmF0YXIvYXZhdGFyXzAyLnBuZyIsInVzZXJJZCI6IjZhNWNmN2NmLTQ0ODYtNGJlNS1hMDIzLTUyOTkyOGUyZDg1YyIsInJlZ1RpbWUiOjE3NTI3NjcyOTk2OTgsInBob25lIjoiIiwiY3VzdG9tZXJJZCI6MjgzNTEyODQ1LCJicmFuZCI6InN1bi53aW4iLCJ1c2VybmFtZSI6IlNDX2FuaGxhdHJ1bWFwaTEiLCJ0aW1lc3RhbXAiOjE3NTI3ODczMDg2NTl9.5PQjsPsm2G7SyEnAbNqXtxkxYlMQIwcJpxjh1l_hH6c",
+    {
+      headers: {
+        "User-Agent": "Mozilla/5.0",
+        "Origin": "https://play.sun.win"
+      }
+    }
+  );
 
   ws.on('open', () => {
     console.log('[✅] Đã kết nối WebSocket');
     messagesToSend.forEach((msg, i) => {
       setTimeout(() => {
         if (ws.readyState === WebSocket.OPEN) {
-          console.log('Gửi đi:', JSON.stringify(msg));
           ws.send(JSON.stringify(msg));
         }
       }, i * 600);
     });
 
-    clearTimeout(successTimeout);
-    successTimeout = setTimeout(() => {
-      if (ws.readyState === WebSocket.OPEN) {
-        console.log('🎉🎉🎉 [THÀNH CÔNG] Lệnh đã được chấp nhận, kết nối ổn định! 🎉🎉🎉');
-      }
-    }, 5000); 
-
     pingInterval = setInterval(() => {
-      if (ws.readyState === WebSocket.OPEN) { ws.ping(); }
+      if (ws.readyState === WebSocket.OPEN) {
+        ws.ping();
+      }
     }, 15000);
   });
 
-  ws.on('pong', () => {});
+  ws.on('pong', () => {
+    console.log('[📶] Ping OK');
+  });
 
   ws.on('message', (message) => {
-    console.log('Nhận được:', message.toString());
+    try {
+      const data = JSON.parse(message);
+      if (Array.isArray(data) && typeof data[1] === 'object') {
+        const cmd = data[1].cmd;
+
+        if (cmd === 1008 && data[1].sid) {
+          id_phien_chua_co_kq = data[1].sid;
+        }
+
+        if (cmd === 1003 && data[1].gBB) {
+          const { d1, d2, d3 } = data[1];
+          const total = d1 + d2 + d3;
+          const result = total > 10 ? "T" : "X";
+
+          patternHistory.push(result);
+          if (patternHistory.length > 20) patternHistory.shift();
+
+          const text = `${d1}-${d2}-${d3} = ${total} (${result === 'T' ? 'Tài' : 'Xỉu'})`;
+          const du_doan = duDoanTiepTheo(patternHistory);
+
+          currentData = {
+            id: "binhtool90",
+            id_phien: id_phien_chua_co_kq,
+            ket_qua: text,
+            pattern: patternHistory.join(''),
+            du_doan: du_doan === "T" ? "Tài" : du_doan === "X" ? "Xỉu" : "?"
+          };
+
+          console.log(`🎲 Phiên ${id_phien_chua_co_kq}: ${text} → Dự đoán: ${currentData.du_doan}`);
+          id_phien_chua_co_kq = null;
+        }
+      }
+    } catch (e) {
+      console.error('[❌] Lỗi xử lý:', e.message);
+    }
   });
 
   ws.on('close', () => {
-    clearTimeout(successTimeout); 
     console.log('[🔌] Mất kết nối WebSocket. Đang reconnect...');
     clearInterval(pingInterval);
-    reconnectTimeout = setTimeout(connectWebSocket, 2500);
+    if (!isManuallyClosed) {
+      reconnectTimeout = setTimeout(connectWebSocket, 2500);
+    }
   });
 
   ws.on('error', (err) => {
@@ -97,8 +132,13 @@ function connectWebSocket() {
 }
 
 // === API ===
-app.get('/taixiu', (req, res) => res.json(currentData));
-app.get('/', (req, res) => res.send(`<h2>🎯 SunWin Tài Xỉu</h2><p><a href="/taixiu">Xem JSON kết quả</a></p>`));
+app.get('/taixiu', (req, res) => {
+  res.json(currentData);
+});
+
+app.get('/', (req, res) => {
+  res.send(`<h2>🎯 SunWin Tài Xỉu</h2><p><a href="/taixiu">Xem JSON kết quả</a></p>`);
+});
 
 // === Khởi động server ===
 app.listen(PORT, () => {
