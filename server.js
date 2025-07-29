@@ -31,7 +31,7 @@ const messagesToSend = [
   }],
 
   // Bước 3: Thử lệnh 317
-  [6, "SimmsLobbyPlugin", { cmd: 317 }] 
+  [6, "taixiuPlugin", { cmd: 1005 }] 
 ];
 
 
