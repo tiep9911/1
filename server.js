@@ -28,19 +28,19 @@ let patternHistory = []; // Lưu dãy T/X gần nhất
 
 // =================================================================
 // === Danh sách tin nhắn gửi lên server WebSocket ===
-// === Dùng thông tin mới bạn lấy được để tạo lại tin nhắn xác thực ===
 // =================================================================
 const messagesToSend = [
-  // Tin nhắn xác thực mới
+  // Tin nhắn xác thực (giữ nguyên)
   [1, "Simms", "SC_tiep1412010", "tiep2010", {
     "info": AUTH_INFO,
     "signature": AUTH_SIGNATURE,
     "pid": 4,
     "subi": true
   }],
-  // Các tin nhắn để lấy dữ liệu game
-  [6, "MiniGame", "taixiuPlugin", { cmd: 1005 }],
-  [6, "MiniGame", "lobbyPlugin", { cmd: 10001 }]
+
+  // Thử nghiệm gửi các lệnh 310 và 317
+  [6, "SimmsLobbyPlugin", { cmd: 310 }],
+  [6, "SimmsLobbyPlugin", { cmd: 317 }]
 ];
 
 
@@ -90,6 +90,7 @@ function connectWebSocket() {
     messagesToSend.forEach((msg, i) => {
       setTimeout(() => {
         if (ws.readyState === WebSocket.OPEN) {
+          console.log('Gửi đi:', JSON.stringify(msg)); // Log tin nhắn gửi đi để debug
           ws.send(JSON.stringify(msg));
         }
       }, i * 600);
@@ -103,20 +104,26 @@ function connectWebSocket() {
   });
 
   ws.on('pong', () => {
-    // console.log('[📶] Ping OK'); // Có thể tắt log này đi cho đỡ rối
+    // console.log('[📶] Ping OK');
   });
 
   ws.on('message', (message) => {
+    // Log tất cả tin nhắn nhận được để phân tích
+    console.log('Nhận được:', message.toString());
+    
     try {
       const data = JSON.parse(message);
+      // Bạn cần phân tích cấu trúc dữ liệu mới ở đây
+      // và cập nhật lại logic bên dưới cho phù hợp.
+      // Các mã lệnh 1003, 1008 có thể không còn đúng nữa.
       if (Array.isArray(data) && typeof data[1] === 'object') {
         const cmd = data[1].cmd;
 
-        if (cmd === 1008 && data[1].sid) {
+        if (cmd === 1008 && data[1].sid) { 
           id_phien_chua_co_kq = data[1].sid;
         }
 
-        if (cmd === 1003 && data[1].gBB) {
+        if (cmd === 1003 && data[1].gBB) { 
           const { d1, d2, d3 } = data[1];
           const total = d1 + d2 + d3;
           const result = total > 10 ? "T" : "X";
@@ -140,7 +147,7 @@ function connectWebSocket() {
         }
       }
     } catch (e) {
-      console.error('[❌] Lỗi xử lý:', e.message);
+      // console.error('[❌] Lỗi xử lý:', e.message);
     }
   });
 
